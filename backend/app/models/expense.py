@@ -14,3 +14,11 @@ class ExpenseBase(SQLModel):
 
 class Expense(ExpenseBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
+
+
+class ExpenseCreate(ExpenseBase):
+    pass
+
+
+class ExpensePublic(ExpenseBase):
+    id: int

@@ -18,3 +18,4 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 - Backend: endpointy `/categories` (tworzenie, lista, podgląd, edycja, usuwanie)
 - Backend: model `Expense` (kwota, data, kategoria, sklep, opis); włączone klucze obce w SQLite
 - Backend: usunięcie kategorii z wydatkami zwraca 409 zamiast błędu serwera
+- Backend: `POST /expenses` i `GET /expenses` z filtrami `month` (RRRR-MM) i `category_id`
