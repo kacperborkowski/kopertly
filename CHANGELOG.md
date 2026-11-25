@@ -7,6 +7,8 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-25
+
 ### Added
 
 - README z opisem aplikacji i `.gitignore`
@@ -29,3 +31,7 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 - Backend: `POST /imports/spreadsheet/preview`, czyli podgląd importu arkusza z propozycją przypisania wierszy
 - Backend: `POST /imports/spreadsheet`, czyli import miesięcznych sum jako wydatków i przychodów; ponowny import nie dubluje danych
 - Backend: linter i formatowanie kodu (ruff)
+- Automatyczne tworzenie tagu i GitHub Release po zmianie wersji na `main`
+
+[Unreleased]: https://github.com/kacperborkowski/kopertly/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/kacperborkowski/kopertly/releases/tag/v0.1.0
