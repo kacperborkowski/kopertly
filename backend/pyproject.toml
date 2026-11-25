@@ -8,3 +8,12 @@ dependencies = [
     "pydantic-settings>=2.16.3",
     "sqlmodel>=0.0.50",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

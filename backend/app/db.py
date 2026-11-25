@@ -4,7 +4,7 @@ from collections.abc import Generator
 from typing import Annotated
 
 from fastapi import Depends
-from sqlalchemy import event
+from sqlalchemy import Engine, event
 from sqlmodel import Session, SQLModel, create_engine
 
 from app.config import get_settings
@@ -17,20 +17,26 @@ settings = get_settings()
 # `check_same_thread=False`: SQLite domyślnie pozwala używać połączenia tylko
 # w wątku, który je utworzył. FastAPI obsługuje żądania w wielu wątkach,
 # więc wyłączamy to ograniczenie (każde żądanie i tak dostaje własną sesję).
-engine = create_engine(
-    settings.database_url,
-    connect_args={"check_same_thread": False},
-)
-
-
-@event.listens_for(engine, "connect")
 def _enable_sqlite_foreign_keys(dbapi_connection, _connection_record) -> None:
     cursor = dbapi_connection.cursor()
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
 
-def create_db_and_tables() -> None:
+def make_engine(database_url: str, **kwargs) -> Engine:
+    new_engine = create_engine(
+        database_url,
+        connect_args={"check_same_thread": False},
+        **kwargs,
+    )
+    event.listen(new_engine, "connect", _enable_sqlite_foreign_keys)
+    return new_engine
+
+
+engine = make_engine(settings.database_url)
+
+
+def create_db_and_tables(bind: Engine = engine) -> None:
     """Tworzy tabele dla wszystkich modeli, których jeszcze nie ma w bazie.
 
     Uwaga: `create_all` tylko tworzy brakujące tabele. Nie zmienia tabel, które
@@ -41,7 +47,7 @@ def create_db_and_tables() -> None:
     # funkcji gwarantuje, że wszystkie modele są załadowane, zanim utworzymy tabele.
     import app.models  # noqa: F401
 
-    SQLModel.metadata.create_all(engine)
+    SQLModel.metadata.create_all(bind)
 
 
 def get_session() -> Generator[Session]:
