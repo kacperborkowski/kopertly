@@ -43,3 +43,23 @@ class BudgetPublic(SQLModel):
     month: str
     income: Decimal
     allocations: list[BudgetAllocationBase]
+
+
+class CategorySummary(SQLModel):
+    category_id: int
+    name: str
+    color: str
+    planned: Decimal
+    spent: Decimal
+    remaining: Decimal
+
+
+class BudgetSummary(SQLModel):
+    month: str
+    has_budget: bool
+    income: Decimal
+    planned_total: Decimal
+    spent_total: Decimal
+    remaining_total: Decimal
+    unallocated: Decimal
+    categories: list[CategorySummary]
