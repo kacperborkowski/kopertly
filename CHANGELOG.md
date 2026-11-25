@@ -16,3 +16,4 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 - Backend: połączenie z bazą SQLite przez SQLModel; `GET /health` sprawdza też bazę
 - Backend: model `Category` (koperta): unikalna nazwa i kolor HEX
 - Backend: endpointy `/categories` (tworzenie, lista, podgląd, edycja, usuwanie)
+- Backend: model `Expense` (kwota, data, kategoria, sklep, opis); włączone klucze obce w SQLite
