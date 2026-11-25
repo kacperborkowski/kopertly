@@ -151,7 +151,9 @@ def test_delete_category_removes_its_budget_allocations(
     budget = MonthlyBudget(month="2026-11", income=Decimal("5000"))
     session.add(budget)
     session.commit()
-    session.add(BudgetAllocation(budget_id=budget.id, category_id=category["id"], amount=Decimal("1200")))
+    session.add(
+        BudgetAllocation(budget_id=budget.id, category_id=category["id"], amount=Decimal("1200"))
+    )
     session.commit()
 
     response = client.delete(f"/categories/{category['id']}")
@@ -167,7 +169,9 @@ def _allocate(session: Session, month: str, category_id: int, amount: str) -> No
         budget = MonthlyBudget(month=month)
         session.add(budget)
         session.commit()
-    session.add(BudgetAllocation(budget_id=budget.id, category_id=category_id, amount=Decimal(amount)))
+    session.add(
+        BudgetAllocation(budget_id=budget.id, category_id=category_id, amount=Decimal(amount))
+    )
     session.commit()
 
 
@@ -192,9 +196,7 @@ def test_delete_category_with_expenses_suggests_move_to(
     assert "move_to" in response.json()["detail"]
 
 
-def test_delete_category_moves_expenses(
-    client: TestClient, make_category, make_expense
-) -> None:
+def test_delete_category_moves_expenses(client: TestClient, make_category, make_expense) -> None:
     old = make_category("Jedzenie")
     new = make_category("Zakupy")
     first = make_expense(old["id"], amount="10")

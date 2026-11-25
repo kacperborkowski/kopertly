@@ -9,14 +9,16 @@ from tests.spreadsheets import make_xlsx as _xlsx
 
 
 def test_parses_month_values_per_label() -> None:
-    source = _xlsx({
-        "2025": [
-            [None, *MONTHS, None],
-            ["Przychody", 1000, 1100.5, *[None] * 10, 2100.5],
-            ["Spożywcze"],
-            ["Jedzenie do domu", 1897.76, None, 12.345],
-        ]
-    })
+    source = _xlsx(
+        {
+            "2025": [
+                [None, *MONTHS, None],
+                ["Przychody", 1000, 1100.5, *[None] * 10, 2100.5],
+                ["Spożywcze"],
+                ["Jedzenie do domu", 1897.76, None, 12.345],
+            ]
+        }
+    )
 
     result = parse_spreadsheet(source)
 
@@ -31,11 +33,13 @@ def test_parses_month_values_per_label() -> None:
 
 
 def test_ignores_non_year_sheets_and_reads_all_years() -> None:
-    source = _xlsx({
-        "Planowanie": [["Przychód", 5000]],
-        "2024": [[None, *MONTHS], ["Paliwo", 100]],
-        "2025": [[None, *MONTHS], ["Paliwo", None, 200]],
-    })
+    source = _xlsx(
+        {
+            "Planowanie": [["Przychód", 5000]],
+            "2024": [[None, *MONTHS], ["Paliwo", 100]],
+            "2025": [[None, *MONTHS], ["Paliwo", None, 200]],
+        }
+    )
 
     result = parse_spreadsheet(source)
 
@@ -79,10 +83,12 @@ def test_warns_about_text_values() -> None:
 
 
 def test_warns_about_year_sheet_without_month_header() -> None:
-    source = _xlsx({
-        "2024": [["Coś zupełnie innego"]],
-        "2025": [[None, *MONTHS], ["Paliwo", 100]],
-    })
+    source = _xlsx(
+        {
+            "2024": [["Coś zupełnie innego"]],
+            "2025": [[None, *MONTHS], ["Paliwo", 100]],
+        }
+    )
 
     result = parse_spreadsheet(source)
 
@@ -110,26 +116,28 @@ def test_treats_whitespace_only_cells_as_empty() -> None:
 
 
 def test_repeated_label_in_sheet_gets_section_prefix() -> None:
-    source = _xlsx({
-        "2020": [
-            [None, *MONTHS],
-            ["Rachunki (mieszkanie)"],
-            ["Inne", 100],
-            ["Dom"],
-            ["Chemia", 30],
-            ["Inne", 50],
-        ],
-        "2019": [
-            [None, *MONTHS],
-            ["Rachunki (mieszkanie)"],
-            ["Inne", 90],
-        ],
-        "2021": [
-            [None, *MONTHS],
-            ["Rachunki"],
-            ["Czynsz", 10],
-        ],
-    })
+    source = _xlsx(
+        {
+            "2020": [
+                [None, *MONTHS],
+                ["Rachunki (mieszkanie)"],
+                ["Inne", 100],
+                ["Dom"],
+                ["Chemia", 30],
+                ["Inne", 50],
+            ],
+            "2019": [
+                [None, *MONTHS],
+                ["Rachunki (mieszkanie)"],
+                ["Inne", 90],
+            ],
+            "2021": [
+                [None, *MONTHS],
+                ["Rachunki"],
+                ["Czynsz", 10],
+            ],
+        }
+    )
 
     result = parse_spreadsheet(source)
 

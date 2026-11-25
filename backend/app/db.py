@@ -11,6 +11,7 @@ from app.config import get_settings
 
 settings = get_settings()
 
+
 # Silnik (engine) to obiekt, który zarządza połączeniami z bazą.
 # Tworzymy go raz, na całą aplikację.
 #

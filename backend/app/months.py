@@ -4,10 +4,7 @@ from datetime import date
 def month_range(month: str) -> tuple[date, date]:
     year, month_number = map(int, month.split("-"))
     start = date(year, month_number, 1)
-    if month_number == 12:
-        end = date(year + 1, 1, 1)
-    else:
-        end = date(year, month_number + 1, 1)
+    end = date(year + 1, 1, 1) if month_number == 12 else date(year, month_number + 1, 1)
     return start, end
 
 

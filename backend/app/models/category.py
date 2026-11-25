@@ -12,9 +12,7 @@ HexColor = Annotated[str, StringConstraints(pattern=r"^#[0-9a-fA-F]{6}$")]
 
 # Typ „nazwa kategorii”: spacje na początku i końcu są obcinane,
 # a po obcięciu musi zostać od 1 do 50 znaków (same spacje nie przejdą).
-CategoryName = Annotated[
-    str, StringConstraints(strip_whitespace=True, min_length=1, max_length=50)
-]
+CategoryName = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1, max_length=50)]
 
 
 # Klasa bazowa ze wspólnymi polami. Bez `table=True`, więc to NIE jest tabela,

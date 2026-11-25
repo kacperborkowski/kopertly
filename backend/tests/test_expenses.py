@@ -73,9 +73,7 @@ def test_list_expenses_newest_first(client: TestClient, category: dict, make_exp
     assert dates == ["2026-11-25", "2026-11-03", "2026-10-31"]
 
 
-def test_list_expenses_filtered_by_month(
-    client: TestClient, category: dict, make_expense
-) -> None:
+def test_list_expenses_filtered_by_month(client: TestClient, category: dict, make_expense) -> None:
     make_expense(category["id"], spent_on="2026-10-31")
     make_expense(category["id"], spent_on="2026-11-01")
     make_expense(category["id"], spent_on="2026-11-30")

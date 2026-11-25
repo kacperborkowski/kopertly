@@ -8,22 +8,24 @@ from tests.spreadsheets import MONTHS, make_xlsx
 
 
 def _workbook() -> BytesIO:
-    return make_xlsx({
-        "2025": [
-            [None, *MONTHS],
-            ["Przychody", 5000, 5100.50],
-            ["Spożywcze"],
-            ["Jedzenie do domu", 1000.10, 900.20],
-            ["Koty :)", None, 150],
-            ["Suma", 100, -50],
-        ],
-        "2024": [
-            [None, *MONTHS],
-            ["Jedzenie do domu", *[None] * 11, 800],
-            ["Kot :)", *[None] * 11, 120],
-            ["Weterynarz", *[None] * 11, -30],
-        ],
-    })
+    return make_xlsx(
+        {
+            "2025": [
+                [None, *MONTHS],
+                ["Przychody", 5000, 5100.50],
+                ["Spożywcze"],
+                ["Jedzenie do domu", 1000.10, 900.20],
+                ["Koty :)", None, 150],
+                ["Suma", 100, -50],
+            ],
+            "2024": [
+                [None, *MONTHS],
+                ["Jedzenie do domu", *[None] * 11, 800],
+                ["Kot :)", *[None] * 11, 120],
+                ["Weterynarz", *[None] * 11, -30],
+            ],
+        }
+    )
 
 
 MAPPING = {
@@ -194,10 +196,12 @@ def test_import_rejects_non_xlsx(client: TestClient) -> None:
 
 
 def test_import_sums_repeated_label_in_same_month(client: TestClient) -> None:
-    content = make_xlsx({
-        "2025": [[None, *MONTHS], ["Paliwo", 100]],
-        "2025 ": [[None, *MONTHS], ["Paliwo", 50]],
-    })
+    content = make_xlsx(
+        {
+            "2025": [[None, *MONTHS], ["Paliwo", 100]],
+            "2025 ": [[None, *MONTHS], ["Paliwo", 50]],
+        }
+    )
 
     result = _import(client, {"Paliwo": {"action": "category", "name": "Paliwo"}}, content).json()
 

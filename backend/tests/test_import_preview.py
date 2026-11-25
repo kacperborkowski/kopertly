@@ -8,21 +8,23 @@ from tests.spreadsheets import MONTHS, make_xlsx
 
 @pytest.fixture
 def workbook() -> BytesIO:
-    return make_xlsx({
-        "2025": [
-            [None, *MONTHS],
-            ["Przychody", 5000, 5100],
-            ["Spożywcze"],
-            ["Jedzenie do domu", 1000.10, 900.20],
-            ["Koty :)", None, 150],
-            ["Suma", 100, -50],
-        ],
-        "2024": [
-            [None, *MONTHS],
-            ["Jedzenie do domu", *[None] * 11, 800],
-            ["Kot :)", *[None] * 11, 120],
-        ],
-    })
+    return make_xlsx(
+        {
+            "2025": [
+                [None, *MONTHS],
+                ["Przychody", 5000, 5100],
+                ["Spożywcze"],
+                ["Jedzenie do domu", 1000.10, 900.20],
+                ["Koty :)", None, 150],
+                ["Suma", 100, -50],
+            ],
+            "2024": [
+                [None, *MONTHS],
+                ["Jedzenie do domu", *[None] * 11, 800],
+                ["Kot :)", *[None] * 11, 120],
+            ],
+        }
+    )
 
 
 def _preview(client: TestClient, content: BytesIO, name: str = "Wydatki.xlsx"):

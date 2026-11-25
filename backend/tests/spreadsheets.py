@@ -2,8 +2,20 @@ from io import BytesIO
 
 from openpyxl import Workbook
 
-MONTHS = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec",
-          "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"]
+MONTHS = [
+    "Styczeń",
+    "Luty",
+    "Marzec",
+    "Kwiecień",
+    "Maj",
+    "Czerwiec",
+    "Lipiec",
+    "Sierpień",
+    "Wrzesień",
+    "Październik",
+    "Listopad",
+    "Grudzień",
+]
 
 
 def make_xlsx(sheets: dict[str, list[list]]) -> BytesIO:

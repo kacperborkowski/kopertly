@@ -37,7 +37,9 @@ def make_category(client: TestClient):
 
 @pytest.fixture
 def make_expense(client: TestClient):
-    def _make(category_id: int, amount: str = "10.00", spent_on: str = "2026-11-15", **extra) -> dict:
+    def _make(
+        category_id: int, amount: str = "10.00", spent_on: str = "2026-11-15", **extra
+    ) -> dict:
         payload = {"amount": amount, "spent_on": spent_on, "category_id": category_id, **extra}
         response = client.post("/expenses", json=payload)
         assert response.status_code == 201

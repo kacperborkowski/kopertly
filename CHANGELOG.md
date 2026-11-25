@@ -28,3 +28,4 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 - Backend: odczyt miesięcznych sum z arkusza .xlsx (arkusz na rok, kolumny to miesiące)
 - Backend: `POST /imports/spreadsheet/preview`, czyli podgląd importu arkusza z propozycją przypisania wierszy
 - Backend: `POST /imports/spreadsheet`, czyli import miesięcznych sum jako wydatków i przychodów; ponowny import nie dubluje danych
+- Backend: linter i formatowanie kodu (ruff)

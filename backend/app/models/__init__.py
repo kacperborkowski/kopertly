@@ -22,19 +22,19 @@ from app.models.category import (
     CategoryPublic,
     CategoryUpdate,
 )
-from app.models.imports import (
-    ImportAction,
-    ImportPreview,
-    ImportResult,
-    ImportRowPreview,
-    ImportTarget,
-)
 from app.models.expense import (
     Expense,
     ExpenseBase,
     ExpenseCreate,
     ExpensePublic,
     ExpenseUpdate,
+)
+from app.models.imports import (
+    ImportAction,
+    ImportPreview,
+    ImportResult,
+    ImportRowPreview,
+    ImportTarget,
 )
 
 # `__all__` to lista nazw eksportowanych przez ten moduł.
@@ -45,11 +45,11 @@ __all__ = [
     "BudgetPublic",
     "BudgetSummary",
     "BudgetUpsert",
-    "CategorySummary",
     "Category",
     "CategoryBase",
     "CategoryCreate",
     "CategoryPublic",
+    "CategorySummary",
     "CategoryUpdate",
     "Expense",
     "ExpenseBase",

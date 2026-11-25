@@ -56,7 +56,9 @@ def test_save_budget_with_defaults(client: TestClient) -> None:
     assert response.json() == {"month": "2026-11", "income": "0.00", "allocations": []}
 
 
-def test_save_budget_allows_zero_allocation(client: TestClient, categories: tuple[dict, dict]) -> None:
+def test_save_budget_allows_zero_allocation(
+    client: TestClient, categories: tuple[dict, dict]
+) -> None:
     food, _ = categories
 
     response = client.put(
@@ -122,7 +124,9 @@ def test_copy_previous_across_year(client: TestClient, categories: tuple[dict, d
     assert response.json()["income"] == "7000.00"
 
 
-def test_copy_previous_is_independent_copy(client: TestClient, categories: tuple[dict, dict]) -> None:
+def test_copy_previous_is_independent_copy(
+    client: TestClient, categories: tuple[dict, dict]
+) -> None:
     client.put("/budgets/2026-10", json=_plan(*categories))
     client.post("/budgets/2026-11/copy-previous")
 

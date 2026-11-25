@@ -1,6 +1,5 @@
 from decimal import Decimal
 from io import BytesIO
-
 from typing import Annotated
 
 from fastapi import APIRouter, Form, HTTPException, UploadFile, status
@@ -43,9 +42,7 @@ MappingAdapter = TypeAdapter(dict[str, ImportTarget])
 def read_upload(file: UploadFile) -> ParsedSpreadsheet:
     content = file.file.read(MAX_FILE_SIZE + 1)
     if len(content) > MAX_FILE_SIZE:
-        raise HTTPException(
-            status.HTTP_413_CONTENT_TOO_LARGE, "Plik jest za duży (limit 10 MB)"
-        )
+        raise HTTPException(status.HTTP_413_CONTENT_TOO_LARGE, "Plik jest za duży (limit 10 MB)")
     try:
         return parse_spreadsheet(BytesIO(content))
     except SpreadsheetError as error:
@@ -104,7 +101,9 @@ def preview_spreadsheet(file: UploadFile, session: SessionDep) -> ImportPreview:
 @router.post("/spreadsheet", response_model=ImportResult)
 def import_spreadsheet(
     file: UploadFile,
-    mapping: Annotated[str, Form(examples=['{"Paliwo": {"action": "category", "name": "Paliwo"}}'])],
+    mapping: Annotated[
+        str, Form(examples=['{"Paliwo": {"action": "category", "name": "Paliwo"}}'])
+    ],
     session: SessionDep,
 ) -> ImportResult:
     try:

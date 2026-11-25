@@ -54,6 +54,14 @@ cd backend
 uv run pytest
 ```
 
+Linting and formatting ([ruff](https://docs.astral.sh/ruff/)):
+
+```bash
+cd backend
+uv run ruff check .
+uv run ruff format .
+```
+
 ## Versioning
 
 The project follows [Semantic Versioning](https://semver.org/) in the

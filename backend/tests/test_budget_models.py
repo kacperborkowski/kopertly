@@ -57,9 +57,13 @@ def test_month_is_unique(session: Session, budget: MonthlyBudget) -> None:
 def test_category_allocated_once_per_budget(
     session: Session, budget: MonthlyBudget, category: Category
 ) -> None:
-    session.add(BudgetAllocation(budget_id=budget.id, category_id=category.id, amount=Decimal("100")))
+    session.add(
+        BudgetAllocation(budget_id=budget.id, category_id=category.id, amount=Decimal("100"))
+    )
     session.commit()
-    session.add(BudgetAllocation(budget_id=budget.id, category_id=category.id, amount=Decimal("200")))
+    session.add(
+        BudgetAllocation(budget_id=budget.id, category_id=category.id, amount=Decimal("200"))
+    )
 
     with pytest.raises(IntegrityError):
         session.commit()
@@ -75,7 +79,9 @@ def test_allocation_requires_existing_category(session: Session, budget: Monthly
 def test_deleting_budget_removes_allocations(
     session: Session, budget: MonthlyBudget, category: Category
 ) -> None:
-    session.add(BudgetAllocation(budget_id=budget.id, category_id=category.id, amount=Decimal("100")))
+    session.add(
+        BudgetAllocation(budget_id=budget.id, category_id=category.id, amount=Decimal("100"))
+    )
     session.commit()
 
     session.delete(budget)

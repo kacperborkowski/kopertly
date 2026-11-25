@@ -86,9 +86,7 @@ def parse_spreadsheet(source: BinaryIO) -> ParsedSpreadsheet:
     return result
 
 
-def _parse_year_sheet(
-    year: str, rows: list[tuple], result: ParsedSpreadsheet
-) -> list[_SheetRow]:
+def _parse_year_sheet(year: str, rows: list[tuple], result: ParsedSpreadsheet) -> list[_SheetRow]:
     header_index, month_columns = _find_month_header(rows)
     if header_index is None:
         result.warnings.append(f"Arkusz {year}: brak wiersza z nazwami miesięcy, pominięty")

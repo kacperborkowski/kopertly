@@ -72,9 +72,7 @@ def get_expense(expense_id: int, session: SessionDep) -> Expense:
 
 
 @router.patch("/{expense_id}", response_model=ExpensePublic)
-def update_expense(
-    expense_id: int, data: ExpenseUpdate, session: SessionDep
-) -> Expense:
+def update_expense(expense_id: int, data: ExpenseUpdate, session: SessionDep) -> Expense:
     expense = _get_or_404(session, expense_id)
     changes = {
         field: value

@@ -37,9 +37,7 @@ def _get_or_404(session: Session, category_id: int) -> Category:
     return category
 
 
-def _ensure_name_free(
-    session: Session, name: str, exclude_id: int | None = None
-) -> None:
+def _ensure_name_free(session: Session, name: str, exclude_id: int | None = None) -> None:
     """Przerywa żądanie błędem 409, jeśli kategoria o tej nazwie już istnieje.
 
     Porównujemy bez względu na wielkość liter, więc „jedzenie” i „Jedzenie”
@@ -50,9 +48,7 @@ def _ensure_name_free(
     if exclude_id is not None:
         query = query.where(Category.id != exclude_id)
     if session.exec(query).first() is not None:
-        raise HTTPException(
-            status.HTTP_409_CONFLICT, f"Kategoria „{name}” już istnieje"
-        )
+        raise HTTPException(status.HTTP_409_CONFLICT, f"Kategoria „{name}” już istnieje")
 
 
 # --- Endpointy ---------------------------------------------------------------
@@ -88,9 +84,7 @@ def get_category(category_id: int, session: SessionDep) -> Category:
 
 
 @router.patch("/{category_id}", response_model=CategoryPublic)
-def update_category(
-    category_id: int, data: CategoryUpdate, session: SessionDep
-) -> Category:
+def update_category(category_id: int, data: CategoryUpdate, session: SessionDep) -> Category:
     """Zmienia wybrane pola kategorii (np. tylko kolor)."""
     category = _get_or_404(session, category_id)
     # `exclude_none=True`: bierzemy tylko pola z wartością. Pominięte pola
@@ -106,9 +100,7 @@ def update_category(
 
 
 @router.delete("/{category_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_category(
-    category_id: int, session: SessionDep, move_to: int | None = None
-) -> None:
+def delete_category(category_id: int, session: SessionDep, move_to: int | None = None) -> None:
     """Usuwa kategorię. Kod 204 oznacza „udało się, brak treści w odpowiedzi”."""
     category = _get_or_404(session, category_id)
     if move_to is None:

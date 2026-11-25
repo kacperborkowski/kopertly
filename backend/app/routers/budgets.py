@@ -99,9 +99,7 @@ def get_budget_summary(month: MonthPath, session: SessionDep) -> BudgetSummary:
 
     category_ids = set(planned) | set(spent)
     categories = session.exec(
-        select(Category)
-        .where(col(Category.id).in_(category_ids))
-        .order_by(Category.name)
+        select(Category).where(col(Category.id).in_(category_ids)).order_by(Category.name)
     ).all()
     rows = [
         CategorySummary(
