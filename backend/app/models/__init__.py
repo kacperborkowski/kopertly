@@ -11,7 +11,13 @@ from app.models.category import (
     CategoryPublic,
     CategoryUpdate,
 )
-from app.models.expense import Expense, ExpenseBase, ExpenseCreate, ExpensePublic
+from app.models.expense import (
+    Expense,
+    ExpenseBase,
+    ExpenseCreate,
+    ExpensePublic,
+    ExpenseUpdate,
+)
 
 # `__all__` to lista nazw eksportowanych przez ten moduł.
 __all__ = [
@@ -24,4 +30,5 @@ __all__ = [
     "ExpenseBase",
     "ExpenseCreate",
     "ExpensePublic",
+    "ExpenseUpdate",
 ]
