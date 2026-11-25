@@ -7,7 +7,31 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-25
+
 ### Added
 
 - README z opisem aplikacji i `.gitignore`
 - Zasady wersjonowania i ten plik CHANGELOG
+- Backend: projekt FastAPI zarządzany przez uv, endpoint `GET /health`
+- Backend: konfiguracja przez pydantic-settings (plik `.env`, zmienne `KOPERTLY_*`)
+- Backend: połączenie z bazą SQLite przez SQLModel; `GET /health` sprawdza też bazę
+- Backend: model `Category` (koperta): unikalna nazwa i kolor HEX
+- Backend: endpointy `/categories` (tworzenie, lista, podgląd, edycja, usuwanie)
+- Backend: model `Expense` (kwota, data, kategoria, sklep, opis); włączone klucze obce w SQLite
+- Backend: usunięcie kategorii z wydatkami zwraca 409 zamiast błędu serwera
+- Backend: `POST /expenses` i `GET /expenses` z filtrami `month` (RRRR-MM) i `category_id`
+- Backend: podgląd, edycja i usuwanie wydatku (`GET`, `PATCH`, `DELETE /expenses/{id}`)
+- Backend: testy API w pytest (osobna baza w pamięci)
+- Backend: modele `MonthlyBudget` (miesiąc, przychód) i `BudgetAllocation` (kwota planu na kategorię)
+- Backend: `DELETE /categories/{id}?move_to={id}` przenosi wydatki i kwoty planu do innej kategorii przed usunięciem
+- Backend: endpointy `/budgets/{month}` (odczyt, zapis całego planu, usuwanie) i `POST /budgets/{month}/copy-previous`
+- Backend: `GET /budgets/{month}/summary`, czyli porównanie planu z wydatkami dla każdej koperty
+- Backend: odczyt miesięcznych sum z arkusza .xlsx (arkusz na rok, kolumny to miesiące)
+- Backend: `POST /imports/spreadsheet/preview`, czyli podgląd importu arkusza z propozycją przypisania wierszy
+- Backend: `POST /imports/spreadsheet`, czyli import miesięcznych sum jako wydatków i przychodów; ponowny import nie dubluje danych
+- Backend: linter i formatowanie kodu (ruff)
+- Automatyczne tworzenie tagu i GitHub Release po zmianie wersji na `main`
+
+[Unreleased]: https://github.com/kacperborkowski/kopertly/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/kacperborkowski/kopertly/releases/tag/v0.1.0

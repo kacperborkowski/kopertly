@@ -1,59 +1,92 @@
 # Kopertly
 
-Aplikacja do planowania budżetu metodą kopertową. Każda kategoria to „koperta”
-z zaplanowaną kwotą, a wydatki ją opróżniają.
+A budgeting app based on the envelope method. Each category is an "envelope"
+with a planned amount, and expenses empty it.
 
-## Funkcje (plan)
+## Features (planned)
 
-- **Budżet:** planowanie miesięcznego budżetu w podziale na kategorie
-- **Wydatki:** ręczne wpisywanie albo zdjęcie paragonu, który interpretuje AI, plus wykres wydatków
-- **Kategorie:** użytkownik sam definiuje swoje kategorie
-- **Własne AI:** użytkownik podpina własnego dostawcę (OpenAI, Claude, Gemini albo lokalną Ollamę)
-- **Czat:** rozmowa z AI o wydatkach i realizacji budżetu
+- **Budget:** plan a monthly budget split into categories
+- **Expenses:** enter them manually or snap a receipt photo that AI reads, plus a spending chart
+- **Categories:** users define their own categories
+- **Bring your own AI:** users connect their own provider (OpenAI, Claude, Gemini or a local Ollama)
+- **Chat:** talk with AI about your spending and how well you stick to the budget
 
 ## Stack
 
-| Część    | Technologie                          |
+| Part     | Technologies                         |
 |----------|--------------------------------------|
 | Frontend | React, Vite, TypeScript              |
 | Backend  | Python, FastAPI, SQLModel, SQLite    |
-| AI       | LiteLLM (wielu dostawców)            |
+| AI       | LiteLLM (multiple providers)         |
 
-## Struktura
+## Structure
 
 ```
 kopertly/
-├── backend/    # API w Pythonie (FastAPI)
-└── frontend/   # aplikacja React
+├── backend/    # Python API (FastAPI)
+└── frontend/   # React app
 ```
 
-## Wymagania
+## Requirements
 
 - Python 3.13+
-- [uv](https://docs.astral.sh/uv/), menedżer pakietów Pythona
+- [uv](https://docs.astral.sh/uv/), a Python package manager
 - Node.js 22 LTS
 - Git
 
-## Wersjonowanie
+## Getting started
 
-Projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/) w formacie
-`MAJOR.MINOR.PATCH`:
+### Backend
 
-- **MAJOR:** zmiany niezgodne wstecz (np. API lub bazy danych)
-- **MINOR:** nowe funkcje
-- **PATCH:** poprawki błędów
+```bash
+cd backend
+uv run fastapi dev app/main.py
+```
 
-Dopóki aplikacja jest w budowie, wersje zaczynają się od `0.`. Każdy ukończony
-etap planu to nowa wersja `MINOR` (etap 1 to `0.1.0`, etap 2 to `0.2.0` itd.).
-Wersja `1.0.0` to pierwsza pełna wersja ze wszystkimi funkcjami z planu.
+The API runs at <http://localhost:8000>, with interactive docs at
+<http://localhost:8000/docs>. On the first run, uv downloads the right Python
+version and installs the dependencies.
 
-Przy każdym wydaniu:
+Tests:
 
-1. W [CHANGELOG.md](CHANGELOG.md) przenosimy wpisy z `Unreleased` do sekcji
-   nowej wersji.
-2. Ustawiamy ten sam numer wersji w `backend/pyproject.toml`
-   i `frontend/package.json`.
-3. Oznaczamy commit tagiem Git, np. `git tag -a v0.1.0 -m "v0.1.0"`.
+```bash
+cd backend
+uv run pytest
+```
 
-Komunikaty commitów piszemy według [Conventional Commits](https://www.conventionalcommits.org/),
-dzięki czemu łatwo ustalić, który numer wersji podnieść.
+Linting and formatting ([ruff](https://docs.astral.sh/ruff/)):
+
+```bash
+cd backend
+uv run ruff check .
+uv run ruff format .
+```
+
+## Versioning
+
+The project follows [Semantic Versioning](https://semver.org/) in the
+`MAJOR.MINOR.PATCH` format:
+
+- **MAJOR:** backward-incompatible changes (e.g. to the API or the database)
+- **MINOR:** new features
+- **PATCH:** bug fixes
+
+While the app is under construction, versions start with `0.`. Each completed
+stage of the plan is a new `MINOR` version (stage 1 is `0.1.0`, stage 2 is
+`0.2.0`, and so on). Version `1.0.0` is the first complete release with every
+planned feature.
+
+For each release:
+
+1. In [CHANGELOG.md](CHANGELOG.md), move the entries from `Unreleased` into a
+   section for the new version, e.g. `## [0.1.0] - 2026-11-25`.
+2. Set the same version number in `backend/pyproject.toml` and
+   `frontend/package.json`.
+3. Commit it as `chore(release): vX.Y.Z` and merge to `main`.
+
+After the merge, the [Release workflow](.github/workflows/release.yml) creates the
+`vX.Y.Z` tag and a GitHub Release with the notes from that CHANGELOG section. It runs
+on every push to `main` and does nothing if that version has already been released.
+
+Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/),
+which makes it easy to decide which version number to bump.
