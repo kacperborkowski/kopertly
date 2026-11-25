@@ -33,3 +33,27 @@ kopertly/
 - [uv](https://docs.astral.sh/uv/), menedżer pakietów Pythona
 - Node.js 22 LTS
 - Git
+
+## Wersjonowanie
+
+Projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/) w formacie
+`MAJOR.MINOR.PATCH`:
+
+- **MAJOR:** zmiany niezgodne wstecz (np. API lub bazy danych)
+- **MINOR:** nowe funkcje
+- **PATCH:** poprawki błędów
+
+Dopóki aplikacja jest w budowie, wersje zaczynają się od `0.`. Każdy ukończony
+etap planu to nowa wersja `MINOR` (etap 1 to `0.1.0`, etap 2 to `0.2.0` itd.).
+Wersja `1.0.0` to pierwsza pełna wersja ze wszystkimi funkcjami z planu.
+
+Przy każdym wydaniu:
+
+1. W [CHANGELOG.md](CHANGELOG.md) przenosimy wpisy z `Unreleased` do sekcji
+   nowej wersji.
+2. Ustawiamy ten sam numer wersji w `backend/pyproject.toml`
+   i `frontend/package.json`.
+3. Oznaczamy commit tagiem Git, np. `git tag -a v0.1.0 -m "v0.1.0"`.
+
+Komunikaty commitów piszemy według [Conventional Commits](https://www.conventionalcommits.org/),
+dzięki czemu łatwo ustalić, który numer wersji podnieść.
