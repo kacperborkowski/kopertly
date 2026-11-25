@@ -7,7 +7,13 @@ from fastapi import APIRouter, HTTPException, status
 from sqlmodel import Session, func, select
 
 from app.db import SessionDep
-from app.models import Category, CategoryCreate, CategoryPublic, CategoryUpdate
+from app.models import (
+    Category,
+    CategoryCreate,
+    CategoryPublic,
+    CategoryUpdate,
+    Expense,
+)
 
 # Router to „mini-aplikacja” z grupą endpointów. W main.py dołączamy go do `app`.
 # - prefix: każdy adres w tym pliku zaczyna się od /categories,
@@ -102,5 +108,14 @@ def update_category(
 def delete_category(category_id: int, session: SessionDep) -> None:
     """Usuwa kategorię. Kod 204 oznacza „udało się, brak treści w odpowiedzi”."""
     category = _get_or_404(session, category_id)
+    expense_count = session.exec(
+        select(func.count()).where(Expense.category_id == category_id)
+    ).one()
+    if expense_count > 0:
+        raise HTTPException(
+            status.HTTP_409_CONFLICT,
+            f"Kategoria „{category.name}” ma wydatki ({expense_count}), "
+            "nie można jej usunąć",
+        )
     session.delete(category)
     session.commit()
