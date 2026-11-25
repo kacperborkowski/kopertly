@@ -79,10 +79,14 @@ planned feature.
 For each release:
 
 1. In [CHANGELOG.md](CHANGELOG.md), move the entries from `Unreleased` into a
-   section for the new version.
+   section for the new version, e.g. `## [0.1.0] - 2026-11-25`.
 2. Set the same version number in `backend/pyproject.toml` and
    `frontend/package.json`.
-3. Tag the commit in Git, e.g. `git tag -a v0.1.0 -m "v0.1.0"`.
+3. Commit it as `chore(release): vX.Y.Z` and merge to `main`.
+
+After the merge, the [Release workflow](.github/workflows/release.yml) creates the
+`vX.Y.Z` tag and a GitHub Release with the notes from that CHANGELOG section. It runs
+on every push to `main` and does nothing if that version has already been released.
 
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org/),
 which makes it easy to decide which version number to bump.
