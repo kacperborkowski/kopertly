@@ -2,25 +2,10 @@ from decimal import Decimal
 from io import BytesIO
 
 import pytest
-from openpyxl import Workbook
 
 from app.importers.spreadsheet import MonthlyValue, SpreadsheetError, parse_spreadsheet
-
-MONTHS = ["Styczeń", "Luty", "Marzec", "Kwiecień", "Maj", "Czerwiec", "Lipiec",
-          "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień"]
-
-
-def _xlsx(sheets: dict[str, list[list]]) -> BytesIO:
-    workbook = Workbook()
-    workbook.remove(workbook.active)
-    for title, rows in sheets.items():
-        sheet = workbook.create_sheet(title)
-        for row in rows:
-            sheet.append(row)
-    buffer = BytesIO()
-    workbook.save(buffer)
-    buffer.seek(0)
-    return buffer
+from tests.spreadsheets import MONTHS
+from tests.spreadsheets import make_xlsx as _xlsx
 
 
 def test_parses_month_values_per_label() -> None:

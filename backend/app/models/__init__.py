@@ -22,6 +22,12 @@ from app.models.category import (
     CategoryPublic,
     CategoryUpdate,
 )
+from app.models.imports import (
+    ImportAction,
+    ImportPreview,
+    ImportRowPreview,
+    ImportTarget,
+)
 from app.models.expense import (
     Expense,
     ExpenseBase,
@@ -49,6 +55,10 @@ __all__ = [
     "ExpenseCreate",
     "ExpensePublic",
     "ExpenseUpdate",
+    "ImportAction",
+    "ImportPreview",
+    "ImportRowPreview",
+    "ImportTarget",
     "MonthlyBudget",
     "MonthlyBudgetBase",
 ]

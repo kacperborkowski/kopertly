@@ -8,7 +8,7 @@ from sqlmodel import text
 
 from app.config import get_settings
 from app.db import SessionDep, create_db_and_tables
-from app.routers import budgets, categories, expenses
+from app.routers import budgets, categories, expenses, imports
 
 settings = get_settings()
 
@@ -28,6 +28,7 @@ app = FastAPI(title=settings.app_name, version="0.0.0", lifespan=lifespan)
 app.include_router(categories.router)
 app.include_router(expenses.router)
 app.include_router(budgets.router)
+app.include_router(imports.router)
 
 
 # Dekorator `@app.get(...)` mówi FastAPI: „gdy przyjdzie żądanie GET na /health,
