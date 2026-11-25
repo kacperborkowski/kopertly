@@ -1,7 +1,9 @@
 """Punkt wejścia aplikacji: tu tworzymy obiekt FastAPI i rejestrujemy endpointy."""
 
+import tomllib
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from sqlmodel import text
@@ -11,6 +13,9 @@ from app.db import SessionDep, create_db_and_tables
 from app.routers import budgets, categories, expenses, imports
 
 settings = get_settings()
+
+PYPROJECT = Path(__file__).resolve().parents[1] / "pyproject.toml"
+VERSION = tomllib.loads(PYPROJECT.read_text())["project"]["version"]
 
 
 # `lifespan` to kod uruchamiany przy starcie i zamknięciu serwera.
@@ -22,7 +27,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
 
 # `app` to cała nasza aplikacja webowa. Serwer (uvicorn) szuka właśnie tej zmiennej.
-app = FastAPI(title=settings.app_name, version="0.0.0", lifespan=lifespan)
+app = FastAPI(title=settings.app_name, version=VERSION, lifespan=lifespan)
 
 # Dołączamy endpointy z osobnych plików (routerów).
 app.include_router(categories.router)
