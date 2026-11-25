@@ -25,6 +25,7 @@ from app.models.category import (
 from app.models.imports import (
     ImportAction,
     ImportPreview,
+    ImportResult,
     ImportRowPreview,
     ImportTarget,
 )
@@ -57,6 +58,7 @@ __all__ = [
     "ExpenseUpdate",
     "ImportAction",
     "ImportPreview",
+    "ImportResult",
     "ImportRowPreview",
     "ImportTarget",
     "MonthlyBudget",

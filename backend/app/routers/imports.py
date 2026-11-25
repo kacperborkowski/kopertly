@@ -1,10 +1,15 @@
 from decimal import Decimal
 from io import BytesIO
 
-from fastapi import APIRouter, HTTPException, UploadFile, status
+from typing import Annotated
+
+from fastapi import APIRouter, Form, HTTPException, UploadFile, status
+from fastapi.exceptions import RequestValidationError
+from pydantic import TypeAdapter, ValidationError
 from sqlmodel import select
 
 from app.db import SessionDep
+from app.importers.apply import ImportMappingError, apply_import
 from app.importers.spreadsheet import (
     MonthlyValue,
     ParsedSpreadsheet,
@@ -15,6 +20,7 @@ from app.models import (
     Category,
     ImportAction,
     ImportPreview,
+    ImportResult,
     ImportRowPreview,
     ImportTarget,
 )
@@ -30,6 +36,8 @@ SKIP_LABELS = {
     "stan rzeczywisty",
 }
 INCOME_LABELS = {"przychody", "przychód"}
+
+MappingAdapter = TypeAdapter(dict[str, ImportTarget])
 
 
 def read_upload(file: UploadFile) -> ParsedSpreadsheet:
@@ -91,3 +99,25 @@ def preview_spreadsheet(file: UploadFile, session: SessionDep) -> ImportPreview:
         rows=rows,
         warnings=parsed.warnings,
     )
+
+
+@router.post("/spreadsheet", response_model=ImportResult)
+def import_spreadsheet(
+    file: UploadFile,
+    mapping: Annotated[str, Form(examples=['{"Paliwo": {"action": "category", "name": "Paliwo"}}'])],
+    session: SessionDep,
+) -> ImportResult:
+    try:
+        targets = MappingAdapter.validate_json(mapping)
+    except ValidationError as error:
+        raise RequestValidationError(
+            [{**e, "loc": ("body", "mapping", *e["loc"])} for e in error.errors(include_url=False)]
+        ) from error
+    parsed = read_upload(file)
+    try:
+        result = apply_import(session, parsed.values, targets)
+    except ImportMappingError as error:
+        session.rollback()
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, str(error)) from error
+    result.warnings = parsed.warnings + result.warnings
+    return result

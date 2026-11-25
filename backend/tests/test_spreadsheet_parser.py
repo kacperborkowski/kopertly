@@ -107,3 +107,42 @@ def test_treats_whitespace_only_cells_as_empty() -> None:
 
     assert [v.month for v in result.values] == ["2025-02"]
     assert result.warnings == []
+
+
+def test_repeated_label_in_sheet_gets_section_prefix() -> None:
+    source = _xlsx({
+        "2020": [
+            [None, *MONTHS],
+            ["Rachunki (mieszkanie)"],
+            ["Inne", 100],
+            ["Dom"],
+            ["Chemia", 30],
+            ["Inne", 50],
+        ],
+        "2019": [
+            [None, *MONTHS],
+            ["Rachunki (mieszkanie)"],
+            ["Inne", 90],
+        ],
+        "2021": [
+            [None, *MONTHS],
+            ["Rachunki"],
+            ["Czynsz", 10],
+        ],
+    })
+
+    result = parse_spreadsheet(source)
+
+    assert [(v.label, v.month) for v in result.values] == [
+        ("Rachunki (mieszkanie) / Inne", "2020-01"),
+        ("Chemia", "2020-01"),
+        ("Dom / Inne", "2020-01"),
+        ("Rachunki (mieszkanie) / Inne", "2019-01"),
+        ("Czynsz", "2021-01"),
+    ]
+
+
+def test_rows_without_values_are_section_headers() -> None:
+    source = _xlsx({"2025": [[None, *MONTHS], ["Spożywcze"], ["Jedzenie", 10]]})
+
+    assert [v.label for v in parse_spreadsheet(source).values] == ["Jedzenie"]

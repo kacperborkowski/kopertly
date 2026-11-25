@@ -1,5 +1,6 @@
 import re
 import zipfile
+from collections import Counter
 from dataclasses import dataclass, field
 from decimal import ROUND_HALF_UP, Decimal
 from typing import BinaryIO
@@ -37,6 +38,14 @@ class MonthlyValue:
     amount: Decimal
 
 
+@dataclass(frozen=True)
+class _SheetRow:
+    year: str
+    section: str | None
+    label: str
+    amounts: list[tuple[int, Decimal]]
+
+
 @dataclass
 class ParsedSpreadsheet:
     sheets: list[str] = field(default_factory=list)
@@ -51,12 +60,24 @@ def parse_spreadsheet(source: BinaryIO) -> ParsedSpreadsheet:
         raise SpreadsheetError("Nie udało się odczytać pliku .xlsx") from error
 
     result = ParsedSpreadsheet()
+    sheet_rows: list[_SheetRow] = []
     for sheet in workbook.worksheets:
         year = sheet.title.strip()
         if not YEAR_SHEET.match(year):
             continue
-        _parse_year_sheet(year, list(sheet.iter_rows(values_only=True)), result)
+        sheet_rows += _parse_year_sheet(year, list(sheet.iter_rows(values_only=True)), result)
     workbook.close()
+
+    occurrences = Counter((row.year, row.label) for row in sheet_rows)
+    ambiguous = {label for (_, label), count in occurrences.items() if count > 1}
+    for row in sheet_rows:
+        label = row.label
+        if label in ambiguous and row.section is not None:
+            label = f"{row.section} / {label}"
+        result.values += [
+            MonthlyValue(label=label, month=f"{row.year}-{month:02d}", amount=amount)
+            for month, amount in row.amounts
+        ]
 
     if not result.sheets:
         raise SpreadsheetError(
@@ -65,13 +86,17 @@ def parse_spreadsheet(source: BinaryIO) -> ParsedSpreadsheet:
     return result
 
 
-def _parse_year_sheet(year: str, rows: list[tuple], result: ParsedSpreadsheet) -> None:
+def _parse_year_sheet(
+    year: str, rows: list[tuple], result: ParsedSpreadsheet
+) -> list[_SheetRow]:
     header_index, month_columns = _find_month_header(rows)
     if header_index is None:
         result.warnings.append(f"Arkusz {year}: brak wiersza z nazwami miesięcy, pominięty")
-        return
+        return []
     result.sheets.append(year)
 
+    sheet_rows = []
+    section = None
     for row_index in range(header_index + 1, len(rows)):
         row = rows[row_index]
         label = _clean_label(row[0] if row else None)
@@ -85,6 +110,10 @@ def _parse_year_sheet(year: str, rows: list[tuple], result: ParsedSpreadsheet) -
                     f"Arkusz {year}, wiersz {row_index + 1}: liczby bez nazwy, pominięte"
                 )
             continue
+        if all(value is None for _, value in cells):
+            section = label
+            continue
+        amounts = []
         for month, value in cells:
             amount = _to_amount(value)
             if amount is None:
@@ -94,11 +123,10 @@ def _parse_year_sheet(year: str, rows: list[tuple], result: ParsedSpreadsheet) -
                         f"wartość „{value}” to nie liczba, pominięta"
                     )
                 continue
-            if amount == 0:
-                continue
-            result.values.append(
-                MonthlyValue(label=label, month=f"{year}-{month:02d}", amount=amount)
-            )
+            if amount != 0:
+                amounts.append((month, amount))
+        sheet_rows.append(_SheetRow(year=year, section=section, label=label, amounts=amounts))
+    return sheet_rows
 
 
 def _find_month_header(rows: list[tuple]) -> tuple[int | None, dict[int, int]]:
