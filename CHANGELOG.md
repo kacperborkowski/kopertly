@@ -22,3 +22,4 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 - Backend: podgląd, edycja i usuwanie wydatku (`GET`, `PATCH`, `DELETE /expenses/{id}`)
 - Backend: testy API w pytest (osobna baza w pamięci)
 - Backend: modele `MonthlyBudget` (miesiąc, przychód) i `BudgetAllocation` (kwota planu na kategorię)
+- Backend: `DELETE /categories/{id}?move_to={id}` przenosi wydatki i kwoty planu do innej kategorii przed usunięciem
