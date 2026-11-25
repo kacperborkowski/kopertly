@@ -8,6 +8,7 @@ from sqlmodel import text
 
 from app.config import get_settings
 from app.db import SessionDep, create_db_and_tables
+from app.routers import categories
 
 settings = get_settings()
 
@@ -22,6 +23,9 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
 # `app` to cała nasza aplikacja webowa. Serwer (uvicorn) szuka właśnie tej zmiennej.
 app = FastAPI(title=settings.app_name, version="0.0.0", lifespan=lifespan)
+
+# Dołączamy endpointy z osobnych plików (routerów).
+app.include_router(categories.router)
 
 
 # Dekorator `@app.get(...)` mówi FastAPI: „gdy przyjdzie żądanie GET na /health,

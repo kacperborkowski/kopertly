@@ -15,3 +15,4 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 - Backend: konfiguracja przez pydantic-settings (plik `.env`, zmienne `KOPERTLY_*`)
 - Backend: połączenie z bazą SQLite przez SQLModel; `GET /health` sprawdza też bazę
 - Backend: model `Category` (koperta): unikalna nazwa i kolor HEX
+- Backend: endpointy `/categories` (tworzenie, lista, podgląd, edycja, usuwanie)

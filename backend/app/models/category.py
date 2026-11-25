@@ -10,13 +10,19 @@ from sqlmodel import Field, SQLModel
 # `Annotated[typ, ograniczenia]` dokleja do zwykłego typu dodatkowe reguły walidacji.
 HexColor = Annotated[str, StringConstraints(pattern=r"^#[0-9a-fA-F]{6}$")]
 
+# Typ „nazwa kategorii”: spacje na początku i końcu są obcinane,
+# a po obcięciu musi zostać od 1 do 50 znaków (same spacje nie przejdą).
+CategoryName = Annotated[
+    str, StringConstraints(strip_whitespace=True, min_length=1, max_length=50)
+]
+
 
 # Klasa bazowa ze wspólnymi polami. Bez `table=True`, więc to NIE jest tabela,
 # tylko opis danych. Wykorzystamy ją w następnym kroku także do walidacji
 # danych przychodzących z API (np. przy tworzeniu kategorii).
 class CategoryBase(SQLModel):
     # Nazwa koperty, np. „Jedzenie”. Unikalna: nie może być dwóch „Jedzenie”.
-    name: str = Field(min_length=1, max_length=50, unique=True, index=True)
+    name: CategoryName = Field(unique=True, index=True)
 
     # Kolor w formacie HEX, np. „#4CAF50”. Przyda się w wykresach i interfejsie.
     color: HexColor = "#9E9E9E"
@@ -28,3 +34,25 @@ class Category(CategoryBase, table=True):
     # `int | None`: przed zapisem do bazy obiekt nie ma jeszcze id (None),
     # baza nada je sama przy zapisie (kolejne liczby: 1, 2, 3...).
     id: int | None = Field(default=None, primary_key=True)
+
+
+# --- Schematy API -----------------------------------------------------------
+# Te klasy nie są tabelami. Opisują, jakie dane przyjmuje i zwraca API.
+# FastAPI używa ich do walidacji żądań i do generowania dokumentacji w /docs.
+
+
+class CategoryCreate(CategoryBase):
+    """Dane do utworzenia kategorii: te same pola co w bazie, ale bez `id`."""
+
+
+class CategoryUpdate(SQLModel):
+    """Dane do edycji: każde pole jest opcjonalne, zmieniamy tylko podane."""
+
+    name: CategoryName | None = None
+    color: HexColor | None = None
+
+
+class CategoryPublic(CategoryBase):
+    """To, co zwraca API: pola kategorii plus `id` (tu już zawsze jest liczbą)."""
+
+    id: int
