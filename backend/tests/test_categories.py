@@ -1,5 +1,10 @@
+from decimal import Decimal
+
 import pytest
 from fastapi.testclient import TestClient
+from sqlmodel import Session, select
+
+from app.models import BudgetAllocation, MonthlyBudget
 
 
 def test_create_category(client: TestClient) -> None:
@@ -137,3 +142,20 @@ def test_delete_category_with_expenses_returns_409(
     assert response.status_code == 409
     assert "(2)" in response.json()["detail"]
     assert client.get(f"/categories/{category['id']}").status_code == 200
+
+
+def test_delete_category_removes_its_budget_allocations(
+    client: TestClient, session: Session, make_category
+) -> None:
+    category = make_category("Jedzenie")
+    budget = MonthlyBudget(month="2026-11", income=Decimal("5000"))
+    session.add(budget)
+    session.commit()
+    session.add(BudgetAllocation(budget_id=budget.id, category_id=category["id"], amount=Decimal("1200")))
+    session.commit()
+
+    response = client.delete(f"/categories/{category['id']}")
+
+    assert response.status_code == 204
+    assert session.exec(select(BudgetAllocation)).all() == []
+    assert session.get(MonthlyBudget, budget.id) is not None

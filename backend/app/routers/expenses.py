@@ -6,6 +6,7 @@ from sqlmodel import Session, col, select
 
 from app.db import SessionDep
 from app.models import (
+    MONTH_PATTERN,
     Category,
     Expense,
     ExpenseCreate,
@@ -17,7 +18,7 @@ router = APIRouter(prefix="/expenses", tags=["Wydatki"])
 
 MonthParam = Annotated[
     str | None,
-    Query(pattern=r"^\d{4}-(0[1-9]|1[0-2])$", examples=["2026-11"]),
+    Query(pattern=MONTH_PATTERN, examples=["2026-11"]),
 ]
 
 

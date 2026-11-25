@@ -4,6 +4,13 @@ Import tutaj sprawia, że `from app.models import Category` działa, a przy okaz
 SQLModel „widzi” każdy model i wie, jakie tabele utworzyć.
 """
 
+from app.models.budget import (
+    MONTH_PATTERN,
+    BudgetAllocation,
+    BudgetAllocationBase,
+    MonthlyBudget,
+    MonthlyBudgetBase,
+)
 from app.models.category import (
     Category,
     CategoryBase,
@@ -21,6 +28,9 @@ from app.models.expense import (
 
 # `__all__` to lista nazw eksportowanych przez ten moduł.
 __all__ = [
+    "MONTH_PATTERN",
+    "BudgetAllocation",
+    "BudgetAllocationBase",
     "Category",
     "CategoryBase",
     "CategoryCreate",
@@ -31,4 +41,6 @@ __all__ = [
     "ExpenseCreate",
     "ExpensePublic",
     "ExpenseUpdate",
+    "MonthlyBudget",
+    "MonthlyBudgetBase",
 ]
