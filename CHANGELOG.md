@@ -25,3 +25,4 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 - Backend: `DELETE /categories/{id}?move_to={id}` przenosi wydatki i kwoty planu do innej kategorii przed usunięciem
 - Backend: endpointy `/budgets/{month}` (odczyt, zapis całego planu, usuwanie) i `POST /budgets/{month}/copy-previous`
 - Backend: `GET /budgets/{month}/summary`, czyli porównanie planu z wydatkami dla każdej koperty
+- Backend: odczyt miesięcznych sum z arkusza .xlsx (arkusz na rok, kolumny to miesiące)
