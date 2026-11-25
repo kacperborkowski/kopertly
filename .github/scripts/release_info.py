@@ -14,7 +14,7 @@ def current_version() -> str:
 def release_notes(version: str) -> str:
     changelog = (ROOT / "CHANGELOG.md").read_text()
     match = re.search(
-        rf"^## \[{re.escape(version)}\][^\n]*\n(.*?)(?=^## \[|\Z)",
+        rf"^## \[{re.escape(version)}\][^\n]*\n(.*?)(?=^## \[|^\[[^\]]+\]: |\Z)",
         changelog,
         flags=re.MULTILINE | re.DOTALL,
     )
