@@ -13,3 +13,4 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 - Zasady wersjonowania i ten plik CHANGELOG
 - Backend: projekt FastAPI zarządzany przez uv, endpoint `GET /health`
 - Backend: konfiguracja przez pydantic-settings (plik `.env`, zmienne `KOPERTLY_*`)
+- Backend: połączenie z bazą SQLite przez SQLModel; `GET /health` sprawdza też bazę
