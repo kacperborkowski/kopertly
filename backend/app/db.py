@@ -25,9 +25,14 @@ engine = create_engine(
 def create_db_and_tables() -> None:
     """Tworzy tabele dla wszystkich modeli, których jeszcze nie ma w bazie.
 
-    SQLModel zna tylko modele, które zostały już zaimportowane, więc w kolejnych
-    krokach będziemy importować tu moduły z modelami (Category, Expense...).
+    Uwaga: `create_all` tylko tworzy brakujące tabele. Nie zmienia tabel, które
+    już istnieją (np. gdy dodamy nowe pole do modelu). Na tym etapie wystarczy
+    wtedy usunąć plik kopertly.db; później dodamy do tego narzędzie (migracje).
     """
+    # SQLModel zna tylko modele, które zostały zaimportowane. Import wewnątrz
+    # funkcji gwarantuje, że wszystkie modele są załadowane, zanim utworzymy tabele.
+    import app.models  # noqa: F401
+
     SQLModel.metadata.create_all(engine)
 
 
