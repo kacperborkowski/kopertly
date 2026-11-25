@@ -1,0 +1,32 @@
+# --- System ---
+.DS_Store
+
+# --- Edytory ---
+.vscode/
+.idea/
+
+# --- Sekrety i konfiguracja lokalna ---
+.env
+.env.*
+!.env.example
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Baza danych (lokalna) ---
+*.db
+*.sqlite3
+
+# --- Node / frontend ---
+node_modules/
+dist/
+*.log
+
+# --- Wgrane zdjęcia paragonów ---
+uploads/
