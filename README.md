@@ -34,6 +34,19 @@ kopertly/
 - Node.js 22 LTS
 - Git
 
+## Uruchomienie
+
+### Backend
+
+```bash
+cd backend
+uv run fastapi dev app/main.py
+```
+
+API działa pod <http://localhost:8000>, a interaktywna dokumentacja pod
+<http://localhost:8000/docs>. Przy pierwszym uruchomieniu uv sam pobierze
+odpowiednią wersję Pythona i zainstaluje zależności.
+
 ## Wersjonowanie
 
 Projekt stosuje [Semantic Versioning](https://semver.org/lang/pl/) w formacie

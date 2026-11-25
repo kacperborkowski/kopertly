@@ -11,3 +11,4 @@ a numeracja wersji na [Semantic Versioning](https://semver.org/lang/pl/).
 
 - README z opisem aplikacji i `.gitignore`
 - Zasady wersjonowania i ten plik CHANGELOG
+- Backend: projekt FastAPI zarządzany przez uv, endpoint `GET /health`
