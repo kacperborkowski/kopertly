@@ -2,8 +2,12 @@
 
 from fastapi import FastAPI
 
+from app.config import get_settings
+
+settings = get_settings()
+
 # `app` to cała nasza aplikacja webowa. Serwer (uvicorn) szuka właśnie tej zmiennej.
-app = FastAPI(title="Kopertly API", version="0.0.0")
+app = FastAPI(title=settings.app_name, version="0.0.0")
 
 
 # Dekorator `@app.get(...)` mówi FastAPI: „gdy przyjdzie żądanie GET na /health,
