@@ -32,3 +32,14 @@ class BudgetAllocation(BudgetAllocationBase, table=True):
 
     id: int | None = Field(default=None, primary_key=True)
     budget_id: int = Field(foreign_key="monthly_budget.id", ondelete="CASCADE", index=True)
+
+
+class BudgetUpsert(SQLModel):
+    income: Decimal = Field(default=Decimal("0"), ge=0, max_digits=10, decimal_places=2)
+    allocations: list[BudgetAllocationBase] = []
+
+
+class BudgetPublic(SQLModel):
+    month: str
+    income: Decimal
+    allocations: list[BudgetAllocationBase]

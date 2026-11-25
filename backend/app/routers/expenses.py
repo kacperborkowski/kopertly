@@ -1,4 +1,3 @@
-from datetime import date
 from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, Query, status
@@ -13,6 +12,7 @@ from app.models import (
     ExpensePublic,
     ExpenseUpdate,
 )
+from app.months import month_range
 
 router = APIRouter(prefix="/expenses", tags=["Wydatki"])
 
@@ -20,16 +20,6 @@ MonthParam = Annotated[
     str | None,
     Query(pattern=MONTH_PATTERN, examples=["2026-11"]),
 ]
-
-
-def _month_range(month: str) -> tuple[date, date]:
-    year, month_number = map(int, month.split("-"))
-    start = date(year, month_number, 1)
-    if month_number == 12:
-        end = date(year + 1, 1, 1)
-    else:
-        end = date(year, month_number + 1, 1)
-    return start, end
 
 
 REQUIRED_FIELDS = ("amount", "spent_on", "category_id")
@@ -68,7 +58,7 @@ def list_expenses(
 ) -> list[Expense]:
     query = select(Expense)
     if month is not None:
-        start, end = _month_range(month)
+        start, end = month_range(month)
         query = query.where(Expense.spent_on >= start, Expense.spent_on < end)
     if category_id is not None:
         query = query.where(Expense.category_id == category_id)

@@ -8,6 +8,8 @@ from app.models.budget import (
     MONTH_PATTERN,
     BudgetAllocation,
     BudgetAllocationBase,
+    BudgetPublic,
+    BudgetUpsert,
     MonthlyBudget,
     MonthlyBudgetBase,
 )
@@ -31,6 +33,8 @@ __all__ = [
     "MONTH_PATTERN",
     "BudgetAllocation",
     "BudgetAllocationBase",
+    "BudgetPublic",
+    "BudgetUpsert",
     "Category",
     "CategoryBase",
     "CategoryCreate",
